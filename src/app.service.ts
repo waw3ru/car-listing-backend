@@ -17,7 +17,20 @@ export class AppService {
 
   async query($q: PaginationQueryValidationType) {
     let q = this.db
-      .select()
+      .select({
+        id: schemas.carSchema.id,
+        name: schemas.carSchema.name,
+        carMake: schemas.carMakeSchema,
+        carModel: schemas.carModelSchema,
+        yearOfManufacture: schemas.carSchema.yearOfManufacture,
+        color: schemas.carSchema.color,
+        imageUrl: schemas.carSchema.imageUrl,
+        vipStatus: schemas.carSchema.vipStatus,
+        purchaseStatus: schemas.carSchema.purchaseStatus,
+        minPrice: schemas.carSchema.minPrice,
+        createdOn: schemas.carSchema.createdOn,
+        updatedOn: schemas.carSchema.updatedOn,
+      })
       .from(schemas.carSchema)
       .leftJoin(
         schemas.carMakeSchema,
