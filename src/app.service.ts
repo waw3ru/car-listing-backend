@@ -5,6 +5,11 @@ import { and } from 'node_modules/drizzle-orm/sql/expressions/index.cjs';
 import { PaginationQueryValidationType } from './common/validations';
 import { DB } from './database/database.module';
 import * as schemas from './database/database.schemas';
+import {
+  CarInsertType,
+  CarMakeInsertType,
+  CarModelInsertType,
+} from './database/schema.types';
 
 @Injectable()
 export class AppService {
@@ -41,12 +46,37 @@ export class AppService {
     };
   }
 
-  createCarMake(carData: any) {
-    return this.db.insert(schemas.carMakeSchema).values(carData);
+  createCarMake(data: CarMakeInsertType) {
+    return this.db.insert(schemas.carMakeSchema).values(data);
   }
 
-  createCarModel(carData: any) {
-    return this.db.insert(schemas.carModelSchema).values(carData);
+  updateCarMake(id: string, data: CarMakeInsertType) {
+    return this.db
+      .update(schemas.carMakeSchema)
+      .set(data)
+      .where(eq(schemas.carMakeSchema.id, id));
+  }
+
+  createCarModel(data: CarModelInsertType) {
+    return this.db.insert(schemas.carModelSchema).values(data);
+  }
+
+  updateCarModel(id: string, data: CarModelInsertType) {
+    return this.db
+      .update(schemas.carModelSchema)
+      .set(data)
+      .where(eq(schemas.carModelSchema.id, id));
+  }
+
+  createCar(data: CarInsertType) {
+    return this.db.insert(schemas.carSchema).values(data);
+  }
+
+  updateCar(id: string, data: CarInsertType) {
+    return this.db
+      .update(schemas.carSchema)
+      .set(data)
+      .where(eq(schemas.carSchema.id, id));
   }
 
   getCarMakes() {

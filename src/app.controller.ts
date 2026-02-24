@@ -16,13 +16,22 @@ import {
   type PaginationQueryValidationType,
   type UpdateCarModelValidationType,
   type UpdateCarMakeValidationType,
+  type CreateCarValidationType,
+  type UpdateCarValidationType,
   createCarMakeValidation,
   createCarModelValidation,
   paginationQueryValidation,
   updateCarModelValidation,
   updateCarMakeValidation,
+  updateCarValidation,
+  createCarValidation,
 } from './common/validations';
 import { AuthGuard } from '@nestjs/passport';
+import {
+  CarInsertType,
+  CarMakeInsertType,
+  CarModelInsertType,
+} from './database/schema.types';
 
 @Controller()
 export class AppController {
@@ -52,7 +61,7 @@ export class AppController {
     @Body(new ZodValidationPipe(createCarMakeValidation))
     data: CreateCarMakeValidationType,
   ) {
-    return this.appService.createCarMake(data);
+    return this.appService.createCarMake(data as unknown as CarMakeInsertType);
   }
 
   @UseGuards(AuthGuard('basic'))
@@ -61,25 +70,54 @@ export class AppController {
     @Body(new ZodValidationPipe(createCarModelValidation))
     data: CreateCarModelValidationType,
   ) {
-    return this.appService.createCarModel(data);
+    return this.appService.createCarModel(
+      data as unknown as CarModelInsertType,
+    );
   }
 
   @UseGuards(AuthGuard('basic'))
   @Put('car-makes')
   updateCarMake(
+    @Param('id') id: string,
     @Body(new ZodValidationPipe(updateCarMakeValidation))
     data: UpdateCarMakeValidationType,
   ) {
-    return this.appService.createCarMake(data);
+    return this.appService.updateCarMake(
+      id,
+      data as unknown as CarMakeInsertType,
+    );
   }
 
   @UseGuards(AuthGuard('basic'))
   @Put('car-models')
   updateCarModel(
+    @Param('id') id: string,
     @Body(new ZodValidationPipe(updateCarModelValidation))
     data: UpdateCarModelValidationType,
   ) {
-    return this.appService.createCarModel(data);
+    return this.appService.updateCarModel(
+      id,
+      data as unknown as CarModelInsertType,
+    );
+  }
+
+  @UseGuards(AuthGuard('basic'))
+  @Post('car')
+  createCar(
+    @Body(new ZodValidationPipe(createCarValidation))
+    data: CreateCarValidationType,
+  ) {
+    return this.appService.createCar(data as unknown as CarInsertType);
+  }
+
+  @UseGuards(AuthGuard('basic'))
+  @Put('car/:id')
+  updateCar(
+    @Param('id') id: string,
+    @Body(new ZodValidationPipe(updateCarValidation))
+    data: UpdateCarValidationType,
+  ) {
+    return this.appService.updateCar(id, data as unknown as CarInsertType);
   }
 
   @Get()

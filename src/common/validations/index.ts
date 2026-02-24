@@ -46,3 +46,29 @@ export const updateCarModelValidation = z.object({
 export type UpdateCarModelValidationType = z.infer<
   typeof updateCarModelValidation
 >;
+
+export const createCarValidation = z.object({
+  name: z.string(),
+  carMake: z.uuid(),
+  carModel: z.uuid(),
+  yearOfManufacture: z.number().min(1900).max(2023),
+  color: z.string(),
+  imageUrl: z.url(),
+  minPrice: z.number().min(0),
+  vipStatus: z.enum(['VIP', 'NON_VIP', 'VIP_PLUS']),
+  purchaseStatus: z.enum(['AVAILABLE', 'SOLD']),
+});
+export type CreateCarValidationType = z.infer<typeof createCarValidation>;
+
+export const updateCarValidation = z.object({
+  name: z.string().optional(),
+  carMake: z.uuid().optional(),
+  carModel: z.uuid().optional(),
+  yearOfManufacture: z.number().min(1900).max(2023).optional(),
+  color: z.string().optional(),
+  imageUrl: z.url().optional(),
+  minPrice: z.number().min(0).optional(),
+  vipStatus: z.enum(['VIP', 'NON_VIP', 'VIP_PLUS']).optional(),
+  purchaseStatus: z.enum(['AVAILABLE', 'SOLD']).optional(),
+});
+export type UpdateCarValidationType = z.infer<typeof updateCarValidation>;
