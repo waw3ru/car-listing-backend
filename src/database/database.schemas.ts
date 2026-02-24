@@ -3,12 +3,17 @@ import {
   check,
   index,
   numeric,
-  sqliteTable,
+  pgEnum,
+  pgTable,
   text,
-} from 'drizzle-orm/sqlite-core';
+} from 'drizzle-orm/pg-core';
+
+// enums
+const vipStatusEnum = pgEnum('vip_status', ['NON_VIP', 'VIP', 'VIP_PLUS']);
+const purchaseStatusEnum = pgEnum('purchase_status', ['AVAILABLE', 'SOLD']);
 
 // schema
-export const carMakeSchema = sqliteTable('car_makes', {
+export const carMakeSchema = pgTable('car_makes', {
   id: text('id')
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
@@ -20,7 +25,7 @@ export const carMakeSchema = sqliteTable('car_makes', {
     .$onUpdate(() => sql`(CURRENT_TIMESTAMP)`),
 });
 
-export const carModelSchema = sqliteTable('car_models', {
+export const carModelSchema = pgTable('car_models', {
   id: text('id')
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
@@ -34,7 +39,7 @@ export const carModelSchema = sqliteTable('car_models', {
     .notNull(),
 });
 
-export const carSchema = sqliteTable(
+export const carSchema = pgTable(
   'cars',
   {
     id: text('id')
@@ -45,7 +50,8 @@ export const carSchema = sqliteTable(
     minPrice: numeric('min_price').notNull(),
     color: text('color').notNull(),
     imageUrl: text('image_url').notNull(),
-    vipStatus: text('vip_status').notNull().default('NON_VIP'),
+    vipStatus: vipStatusEnum('vip_status').default('NON_VIP'),
+    purchaseStatus: purchaseStatusEnum('purchase_status').default('AVAILABLE'),
     createdOn: text('created_on').default(sql`(CURRENT_TIMESTAMP)`),
     updatedOn: text('updated_on')
       .default(sql`(CURRENT_TIMESTAMP)`)

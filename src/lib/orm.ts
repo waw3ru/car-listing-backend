@@ -1,10 +1,11 @@
-import { Database } from 'bun:sqlite';
-import { drizzle } from 'drizzle-orm/bun-sqlite';
+import { SQL } from 'bun';
+import { drizzle as drizzleBunSQL } from 'drizzle-orm/bun-sql';
 
-import * as schema from '../database/database.schemas';
+import * as schemas from '../database/database.schemas';
 
-const db = drizzle(new Database(process.env.DB_FILE), {
-  schema,
+const db = drizzleBunSQL({
+  client: new SQL(process.env.DB!),
+  schema: schemas,
 });
 
 export { db };
